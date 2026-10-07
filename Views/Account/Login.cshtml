@@ -1,0 +1,41 @@
+@model Barks.Models.ViewModels.AdminLoginViewModel
+@{
+    Layout = null;
+    ViewData["Title"] = "Admin login";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f7f8f5" />
+    <title>@ViewData["Title"] | Bark Nibbles Inventory</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body class="account-page">
+    <main class="account-card">
+        <a class="account-brand" asp-controller="Home" asp-action="Index">
+            <img src="~/images/bark-nibbles-logo.jpg" alt="" />
+            <span>bark <strong>nibbles</strong><small>INVENTORY ROOM</small></span>
+        </a>
+        <p class="eyebrow">Admin access</p>
+        <h1>Welcome back</h1>
+        <p class="account-description">Sign in to manage the Bark Nibbles inventory.</p>
+        <div asp-validation-summary="ModelOnly" class="validation-summary" role="alert"></div>
+        <form asp-action="Login" asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post" class="account-form">
+            <div class="form-field">
+                <label asp-for="Username"></label>
+                <input asp-for="Username" autocomplete="username" autofocus />
+                <span asp-validation-for="Username" class="field-error"></span>
+            </div>
+            <div class="form-field">
+                <label asp-for="Password"></label>
+                <input asp-for="Password" autocomplete="current-password" />
+                <span asp-validation-for="Password" class="field-error"></span>
+            </div>
+            <button class="button button-primary account-submit" type="submit">Sign in</button>
+        </form>
+        <p class="account-note">This inventory has one admin account and no public registration.</p>
+    </main>
+</body>
+</html>

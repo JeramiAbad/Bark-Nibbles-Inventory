@@ -1,0 +1,67 @@
+@model Barks.Models.Product
+
+@{
+    ViewData["Title"] = "Edit Product";
+}
+
+<div class="page-heading">
+    <div><p class="eyebrow">Product details</p><h1>Edit product</h1><p class="page-subtitle">On-hand stock can only be changed through a stock movement.</p></div>
+    <a class="button button-secondary" asp-action="Index">Back to products</a>
+</div>
+
+<section class="panel form-panel">
+    <form asp-action="Edit" class="product-form">
+        <input type="hidden" asp-for="ProductId" />
+        <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+        <div class="form-field">
+            <label asp-for="ItemCode"></label>
+            <input asp-for="ItemCode" class="form-control" />
+            <span asp-validation-for="ItemCode" class="field-error"></span>
+        </div>
+        <div class="form-field">
+            <label asp-for="ProductName"></label>
+            <input asp-for="ProductName" class="form-control" />
+            <span asp-validation-for="ProductName" class="field-error"></span>
+        </div>
+        <div class="form-field">
+            <label asp-for="Flavor"></label>
+            <input asp-for="Flavor" class="form-control" />
+            <span asp-validation-for="Flavor" class="field-error"></span>
+        </div>
+        <div class="form-field">
+            <label asp-for="Size"></label>
+            <input asp-for="Size" class="form-control" />
+            <span asp-validation-for="Size" class="field-error"></span>
+        </div>
+        <div class="form-field">
+            <label asp-for="Category"></label>
+            <input asp-for="Category" class="form-control" />
+            <span asp-validation-for="Category" class="field-error"></span>
+        </div>
+        <div class="form-field">
+            <label asp-for="Unit"></label>
+            <input asp-for="Unit" class="form-control" />
+            <span asp-validation-for="Unit" class="field-error"></span>
+        </div>
+        <div class="form-field">
+            <label asp-for="Price"></label>
+            <input asp-for="Price" class="form-control" type="number" min="0" step="0.01" />
+            <span asp-validation-for="Price" class="field-error"></span>
+        </div>
+        <div class="form-field">
+            <label asp-for="Supplier"></label>
+            <input asp-for="Supplier" class="form-control" />
+            <span asp-validation-for="Supplier" class="field-error"></span>
+        </div>
+        <div class="form-field">
+            <label asp-for="MinimumStock"></label>
+            <input asp-for="MinimumStock" class="form-control" type="number" min="0" step="1" />
+            <span asp-validation-for="MinimumStock" class="field-error"></span>
+            <small>Low-stock alerts appear when on-hand stock reaches this level.</small>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="button button-primary">Save changes <span>↗</span></button>
+            <a asp-action="Index" class="text-link">Cancel</a>
+        </div>
+    </form>
+</section>

@@ -1,0 +1,120 @@
+@model Barks.Models.ViewModels.ProductListViewModel
+
+@{
+    ViewData["Title"] = "Products";
+}
+
+<div class="page-heading">
+    <div>
+        <p class="eyebrow">Your treats, all in one place</p>
+        <h1>Products</h1>
+        <p class="page-subtitle">Manage product details, stock levels, and restock thresholds.</p>
+    </div>
+    <a class="button button-primary" asp-action="Create">＋ &nbsp; Add product</a>
+</div>
+
+<section class="panel page-panel">
+    <div class="panel-heading product-list-heading">
+        <div><p class="panel-kicker">The inventory shelf</p><h2>All products <span class="inline-count">@Model.Products.Count</span></h2></div>
+        <form asp-action="Index" method="get" class="product-search">
+            <label class="visually-hidden" for="product-search">Search products</label>
+            <span aria-hidden="true">⌕</span>
+            <input id="product-search" name="search" value="@Model.Search" placeholder="Search products…" />
+            @if (Model.LowStockOnly)
+            {
+                <input type="hidden" name="lowStock" value="true" />
+            }
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <div class="filter-row">
+        <a asp-action="Index" asp-route-search="@Model.Search" class="filter-chip @(!Model.LowStockOnly ? "filter-active" : "")">All products</a>
+        <a asp-action="Index" asp-route-search="@Model.Search" asp-route-lowStock="true" class="filter-chip @(Model.LowStockOnly ? "filter-active" : "")"><span class="filter-dot"></span> Low stock</a>
+        @if (!string.IsNullOrWhiteSpace(Model.Search))
+        {
+            <span class="filter-context">Results for “@Model.Search” <a asp-action="Index" asp-route-lowStock="@Model.LowStockOnly">Clear</a></span>
+        }
+    </div>
+
+    @if (Model.Products.Count == 0)
+    {
+        <div class="empty-state">
+            <span class="empty-icon">⌕</span>
+            <strong>@(Model.LowStockOnly ? "No products need restocking" : "No matching products")</strong>
+            <p>@(Model.LowStockOnly ? "Everything is above its minimum stock level." : "Try another search, or add a product to your inventory.")</p>
+            @if (!Model.LowStockOnly)
+            {
+                <a class="button button-primary button-small" asp-action="Create">Add a product</a>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="table-scroll products-list-table">
+            <table class="data-table products-table">
+                <thead>
+                    <tr><th>Item code</th><th>Product name</th><th>Flavor</th><th>Size</th><th>Category</th><th>Unit</th><th>On hand</th><th>Reorder</th><th>Price (PHP)</th><th>Supplier</th><th>Status</th><th></th></tr>
+                </thead>
+                <tbody>
+                    @foreach (var product in Model.Products)
+                    {
+                        var lowStock = product.MinimumStock > 0 && product.Quantity <= product.MinimumStock;
+                        <tr>
+                            <td><span class="product-name">@(string.IsNullOrWhiteSpace(product.ItemCode) ? "—" : product.ItemCode)</span></td>
+                            <td><span class="product-name">@product.ProductName</span></td>
+                            <td>@(string.IsNullOrWhiteSpace(product.Flavor) ? "—" : product.Flavor)</td>
+                            <td>@(string.IsNullOrWhiteSpace(product.Size) ? "—" : product.Size)</td>
+                            <td>@(string.IsNullOrWhiteSpace(product.Category) ? "—" : product.Category)</td>
+                            <td>@product.Unit</td>
+                            <td><strong class="@(lowStock ? "quantity-low" : "quantity-normal")">@product.Quantity</strong></td>
+                            <td>@(product.MinimumStock == 0 ? "—" : product.MinimumStock)</td>
+                            <td>@(product.Price == 0 ? "—" : product.Price.ToString("C", System.Globalization.CultureInfo.GetCultureInfo("en-PH")))</td>
+                            <td>@(string.IsNullOrWhiteSpace(product.Supplier) ? "—" : product.Supplier)</td>
+                            <td><span class="status-pill @(lowStock ? "status-low" : product.Quantity == 0 ? "status-unset" : "status-good")"><span></span>@(lowStock ? "Restock" : product.Quantity == 0 ? "No stock" : "In stock")</span></td>
+                            <td>
+                                <div class="row-actions">
+                                    <a class="row-action" asp-controller="Transactions" asp-action="Create" asp-route-productId="@product.ProductId" title="Adjust stock" aria-label="Adjust stock for @product.ProductName">±</a>
+                                    <a class="row-action" asp-action="Details" asp-route-id="@product.ProductId" title="Product details" aria-label="View @product.ProductName details">↗</a>
+                                    <a class="row-action" asp-action="Edit" asp-route-id="@product.ProductId" title="Edit product" aria-label="Edit @product.ProductName">✎</a>
+                                    <a class="row-action row-action-muted" asp-action="Delete" asp-route-id="@product.ProductId" title="Delete product" aria-label="Delete @product.ProductName">×</a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="product-cards">
+            @foreach (var product in Model.Products)
+            {
+                var lowStock = product.MinimumStock > 0 && product.Quantity <= product.MinimumStock;
+                <article class="product-card">
+                    <div class="product-card-heading">
+                        <div>
+                            <span class="product-card-code">@(string.IsNullOrWhiteSpace(product.ItemCode) ? "No item code" : product.ItemCode)</span>
+                            <h3>@product.ProductName</h3>
+                        </div>
+                        <span class="status-pill @(lowStock ? "status-low" : product.Quantity == 0 ? "status-unset" : "status-good")"><span></span>@(lowStock ? "Restock" : product.Quantity == 0 ? "No stock" : "In stock")</span>
+                    </div>
+                    <dl class="product-card-details">
+                        <div><dt>Flavor</dt><dd>@(string.IsNullOrWhiteSpace(product.Flavor) ? "—" : product.Flavor)</dd></div>
+                        <div><dt>Size</dt><dd>@(string.IsNullOrWhiteSpace(product.Size) ? "—" : product.Size)</dd></div>
+                        <div><dt>Category</dt><dd>@(string.IsNullOrWhiteSpace(product.Category) ? "—" : product.Category)</dd></div>
+                        <div><dt>Unit</dt><dd>@product.Unit</dd></div>
+                        <div><dt>On hand</dt><dd><strong class="@(lowStock ? "quantity-low" : "quantity-normal")">@product.Quantity</strong></dd></div>
+                        <div><dt>Reorder level</dt><dd>@(product.MinimumStock == 0 ? "—" : product.MinimumStock)</dd></div>
+                        <div><dt>Price (PHP)</dt><dd>@(product.Price == 0 ? "—" : product.Price.ToString("C", System.Globalization.CultureInfo.GetCultureInfo("en-PH")))</dd></div>
+                        <div><dt>Supplier</dt><dd>@(string.IsNullOrWhiteSpace(product.Supplier) ? "—" : product.Supplier)</dd></div>
+                    </dl>
+                    <div class="product-card-actions">
+                        <a class="row-action" asp-controller="Transactions" asp-action="Create" asp-route-productId="@product.ProductId" title="Adjust stock" aria-label="Adjust stock for @product.ProductName">±</a>
+                        <a class="row-action" asp-action="Details" asp-route-id="@product.ProductId" title="Product details" aria-label="View @product.ProductName details">↗</a>
+                        <a class="row-action" asp-action="Edit" asp-route-id="@product.ProductId" title="Edit product" aria-label="Edit @product.ProductName">✎</a>
+                        <a class="row-action row-action-muted" asp-action="Delete" asp-route-id="@product.ProductId" title="Delete product" aria-label="Delete @product.ProductName">×</a>
+                    </div>
+                </article>
+            }
+        </div>
+    }
+</section>

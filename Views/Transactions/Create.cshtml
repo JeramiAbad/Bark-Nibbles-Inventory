@@ -1,0 +1,66 @@
+@model Barks.Models.ViewModels.StockAdjustmentViewModel
+
+@{
+    ViewData["Title"] = "Record stock movement";
+}
+
+<div class="page-heading">
+    <div>
+        <p class="eyebrow">Update your shelves</p>
+        <h1>Record stock movement</h1>
+        <p class="page-subtitle">Every adjustment updates on-hand quantity and adds a ledger entry.</p>
+    </div>
+    <a class="button button-secondary" asp-action="Index">View activity</a>
+</div>
+
+<section class="panel adjustment-panel">
+    @if (ViewBag.HasProducts == false)
+    {
+        <div class="empty-state">
+            <span class="empty-icon">＋</span>
+            <strong>Add a product first</strong>
+            <p>You’ll need a product in your inventory before you can record a stock movement.</p>
+            <a class="button button-primary button-small" asp-controller="Products" asp-action="Create">Add your first product</a>
+        </div>
+    }
+    else
+    {
+        <form asp-action="Create" method="post" class="adjustment-form">
+            <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+            <div class="form-field">
+                <label asp-for="ProductId"></label>
+                <select asp-for="ProductId" asp-items="ViewBag.Products" class="form-control">
+                    <option value="0">Choose a product…</option>
+                </select>
+                <span asp-validation-for="ProductId" class="field-error"></span>
+            </div>
+
+            <fieldset class="form-field movement-field">
+                <legend>Adjustment type</legend>
+                <div class="movement-options">
+                    <label class="movement-choice">
+                        <input asp-for="TransactionType" type="radio" value="Stock In" />
+                        <span><b class="movement-choice-icon movement-in">↓</b><strong>Stock in</strong><small>Received, returned, or restocked</small></span>
+                    </label>
+                    <label class="movement-choice">
+                        <input asp-for="TransactionType" type="radio" value="Stock Out" />
+                        <span><b class="movement-choice-icon movement-out">↑</b><strong>Stock out</strong><small>Sold, sampled, or removed</small></span>
+                    </label>
+                </div>
+                <span asp-validation-for="TransactionType" class="field-error"></span>
+            </fieldset>
+
+            <div class="form-field quantity-field">
+                <label asp-for="Quantity"></label>
+                <input asp-for="Quantity" class="form-control" type="number" min="1" step="1" placeholder="e.g. 24" />
+                <span asp-validation-for="Quantity" class="field-error"></span>
+                <small>Enter the number of individual units moved.</small>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="button button-primary">Save stock movement <span>↗</span></button>
+                <a asp-action="Index" class="text-link">Cancel</a>
+            </div>
+        </form>
+    }
+</section>

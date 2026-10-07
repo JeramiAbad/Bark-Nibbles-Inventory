@@ -1,0 +1,67 @@
+@model Barks.Models.Product
+
+@{
+    ViewData["Title"] = "Create Product";
+}
+
+<div class="page-heading">
+    <div><p class="eyebrow">Grow the inventory</p><h1>Add a product</h1><p class="page-subtitle">Add a treat to the shelf, then record its opening stock.</p></div>
+    <a class="button button-secondary" asp-action="Index">Back to products</a>
+</div>
+
+<section class="panel form-panel">
+    <form asp-action="Create" class="product-form">
+        <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+        <div class="form-field">
+            <label asp-for="ItemCode"></label>
+            <input asp-for="ItemCode" class="form-control" placeholder="e.g. BC-100" />
+            <span asp-validation-for="ItemCode" class="field-error"></span>
+        </div>
+        <div class="form-field">
+            <label asp-for="ProductName"></label>
+            <input asp-for="ProductName" class="form-control" placeholder="e.g. Banana Carrot 100g (Trial Pack)" />
+            <span asp-validation-for="ProductName" class="field-error"></span>
+        </div>
+        <div class="form-field">
+            <label asp-for="Flavor"></label>
+            <input asp-for="Flavor" class="form-control" placeholder="e.g. Banana Carrot" />
+            <span asp-validation-for="Flavor" class="field-error"></span>
+        </div>
+        <div class="form-field">
+            <label asp-for="Size"></label>
+            <input asp-for="Size" class="form-control" placeholder="e.g. 100g (Trial Pack)" />
+            <span asp-validation-for="Size" class="field-error"></span>
+        </div>
+        <div class="form-field">
+            <label asp-for="Category"></label>
+            <input asp-for="Category" class="form-control" placeholder="e.g. Pet Biscuits" />
+            <span asp-validation-for="Category" class="field-error"></span>
+        </div>
+        <div class="form-field">
+            <label asp-for="Unit"></label>
+            <input asp-for="Unit" class="form-control" placeholder="e.g. pack" />
+            <span asp-validation-for="Unit" class="field-error"></span>
+        </div>
+        <div class="form-field">
+            <label asp-for="Price"></label>
+            <input asp-for="Price" class="form-control" type="number" min="0" step="0.01" placeholder="PHP price (optional)" />
+            <span asp-validation-for="Price" class="field-error"></span>
+        </div>
+        <div class="form-field">
+            <label asp-for="Supplier"></label>
+            <input asp-for="Supplier" class="form-control" placeholder="Supplier name" />
+            <span asp-validation-for="Supplier" class="field-error"></span>
+        </div>
+        <div class="form-field">
+            <label asp-for="MinimumStock"></label>
+            <input asp-for="MinimumStock" class="form-control" type="number" min="0" step="1" />
+            <span asp-validation-for="MinimumStock" class="field-error"></span>
+            <small>You’ll be alerted when stock reaches this level.</small>
+        </div>
+        <div class="form-note"><span>↔</span> New products start at zero units. Record stock-in to add your opening quantity to the ledger.</div>
+        <div class="form-actions">
+            <button type="submit" class="button button-primary">Save product <span>↗</span></button>
+            <a asp-action="Index" class="text-link">Cancel</a>
+        </div>
+    </form>
+</section>

@@ -1,0 +1,19 @@
+## Build output
+bin/
+obj/
+publish/
+artifacts/
+
+## Local inventory data and SQLite transient files
+inventory.db
+inventory.db-shm
+inventory.db-wal
+inventory.db-journal
+
+## Generated installers and publish output
+dist/
+
+## Visual Studio and operating-system files
+.vs/
+.DS_Store
+Thumbs.db

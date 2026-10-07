@@ -1,0 +1,51 @@
+@model IEnumerable<Barks.Models.Transaction>
+
+@{
+    ViewData["Title"] = "Stock activity";
+}
+
+<div class="page-heading">
+    <div>
+        <p class="eyebrow">Every movement, accounted for</p>
+        <h1>Stock activity</h1>
+        <p class="page-subtitle">A running record of stock received and stock used.</p>
+    </div>
+    <a class="button button-primary" asp-action="Create">＋ &nbsp; Record stock movement</a>
+</div>
+
+<section class="panel page-panel">
+    <div class="panel-heading">
+        <div><p class="panel-kicker">Inventory ledger</p><h2>Movement history</h2></div>
+        <span class="record-count">@Model.Count() records</span>
+    </div>
+    @if (!Model.Any())
+    {
+        <div class="empty-state">
+            <span class="empty-icon">↔</span>
+            <strong>Your stock ledger is ready</strong>
+            <p>Stock adjustments will appear here as soon as you record them.</p>
+            <a class="button button-primary button-small" asp-action="Create">Record first movement</a>
+        </div>
+    }
+    else
+    {
+        <div class="table-scroll">
+            <table class="data-table transaction-table">
+                <thead><tr><th>Product</th><th>Movement</th><th>Quantity</th><th>Recorded</th><th>Reference</th></tr></thead>
+                <tbody>
+                    @foreach (var transaction in Model)
+                    {
+                        var isStockIn = transaction.TransactionType == "Stock In";
+                        <tr>
+                            <td><span class="product-name">@(transaction.Product?.ProductName ?? "Product removed")</span><span class="cell-subtitle">@(transaction.Product?.Category ?? "—")</span></td>
+                            <td><span class="movement-label @(isStockIn ? "movement-in" : "movement-out")"><span>@(isStockIn ? "↓" : "↑")</span> @transaction.TransactionType</span></td>
+                            <td><strong class="activity-quantity @(isStockIn ? "quantity-positive" : "quantity-negative")">@(isStockIn ? "+" : "−")@transaction.Quantity</strong></td>
+                            <td>@transaction.Date.ToLocalTime().ToString("MMM d, yyyy · h:mm tt")</td>
+                            <td class="reference-cell">#@transaction.TransactionId.ToString("D5")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</section>

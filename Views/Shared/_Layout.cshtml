@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f7f8f5" />
+    <meta name="description" content="Bark Nibbles inventory management." />
+    <title>@ViewData["Title"] | Bark Nibbles Inventory</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body class="app-body">
+    @{
+        var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+        var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+        var transactionType = ViewContext.HttpContext.Request.Query["transactionType"].ToString();
+    }
+    <aside class="sidebar">
+        <a class="sidebar-brand" asp-controller="Home" asp-action="Index">
+            <img src="~/images/bark-nibbles-logo.jpg" alt="" />
+            <span>bark <strong>nibbles</strong><small>INVENTORY ROOM</small></span>
+        </a>
+        <div class="sidebar-label">WORKSPACE</div>
+        <nav class="sidebar-nav" aria-label="Inventory navigation">
+            <a class="@(currentController == "Home" ? "nav-active" : "")" aria-current="@(currentController == "Home" ? "page" : null)" asp-controller="Home" asp-action="Index"><span class="side-icon">▦</span>Dashboard</a>
+            <a class="@(currentController == "Products" ? "nav-active" : "")" aria-current="@(currentController == "Products" ? "page" : null)" asp-controller="Products" asp-action="Index"><span class="side-icon">▤</span>Products</a>
+            <a class="@(currentController == "Transactions" && currentAction == "Create" && transactionType != "Stock Out" ? "nav-active" : "")" aria-current="@(currentController == "Transactions" && currentAction == "Create" && transactionType != "Stock Out" ? "page" : null)" asp-controller="Transactions" asp-action="Create" asp-route-transactionType="Stock In"><span class="side-icon">↓</span>Stock In</a>
+            <a class="@(currentController == "Transactions" && currentAction == "Create" && transactionType == "Stock Out" ? "nav-active" : "")" aria-current="@(currentController == "Transactions" && currentAction == "Create" && transactionType == "Stock Out" ? "page" : null)" asp-controller="Transactions" asp-action="Create" asp-route-transactionType="Stock Out"><span class="side-icon">↑</span>Stock Out</a>
+            <a class="@(currentController == "Transactions" && currentAction == "Index" ? "nav-active" : "")" aria-current="@(currentController == "Transactions" && currentAction == "Index" ? "page" : null)" asp-controller="Transactions" asp-action="Index"><span class="side-icon">↔</span>Transactions</a>
+        </nav>
+        <div class="sidebar-spacer"></div>
+        <div class="sidebar-note">
+            <span class="sidebar-note-icon">✳</span>
+            <strong>Small batches.<br />Big tail wags.</strong>
+            <span>Keep the good stuff in stock.</span>
+        </div>
+        <div class="sidebar-user">
+            <span class="user-avatar">BN</span>
+            <span><strong>@User.Identity?.Name</strong><small>Administrator</small></span>
+            <form asp-controller="Account" asp-action="Logout" method="post">
+                <button class="logout-button" type="submit" title="Sign out">↪</button>
+            </form>
+        </div>
+    </aside>
+
+    <div class="app-main">
+        <header class="topbar">
+            <div class="breadcrumb"><span>Workspace</span><span aria-hidden="true">/</span><strong>@ViewData["Title"]</strong></div>
+            <div class="topbar-meta"><span class="online-indicator"></span> Inventory up to date <span class="topbar-date">@DateTime.Now.ToString("ddd, MMM d")</span></div>
+        </header>
+        <main class="content-area" role="main">
+            @if (TempData["Success"] is string successMessage)
+            {
+                <div class="success-banner" role="status"><span>✓</span>@successMessage</div>
+            }
+            @if (TempData["Error"] is string errorMessage)
+            {
+                <div class="error-banner" role="alert"><span>!</span>@errorMessage</div>
+            }
+            @RenderBody()
+        </main>
+        <footer class="app-footer"><span>© @DateTime.Now.Year Bark Nibbles</span><span>Lovingly handmade · All natural · Always accounted for <span aria-hidden="true">♡</span></span></footer>
+    </div>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

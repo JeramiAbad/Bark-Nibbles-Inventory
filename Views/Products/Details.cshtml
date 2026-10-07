@@ -1,0 +1,30 @@
+@model Barks.Models.Product
+
+@{
+    ViewData["Title"] = "Product details";
+}
+
+<div class="page-heading">
+    <div><p class="eyebrow">@(string.IsNullOrWhiteSpace(Model.ItemCode) ? "No item code" : Model.ItemCode) · @(Model.Category ?? "Uncategorized")</p><h1>@Model.ProductName</h1><p class="page-subtitle">Product and current inventory details.</p></div>
+    <div class="heading-actions">
+        <a class="button button-secondary" asp-controller="Transactions" asp-action="Create" asp-route-productId="@Model.ProductId">± &nbsp; Adjust stock</a>
+        <a class="button button-primary" asp-action="Edit" asp-route-id="@Model.ProductId">Edit product</a>
+    </div>
+</div>
+
+<section class="panel detail-panel">
+    <div class="panel-heading"><div><p class="panel-kicker">Inventory record</p><h2>Product details</h2></div><span class="status-pill @(Model.MinimumStock > 0 && Model.Quantity <= Model.MinimumStock ? "status-low" : Model.Quantity == 0 ? "status-unset" : "status-good")"><span></span>@(Model.MinimumStock > 0 && Model.Quantity <= Model.MinimumStock ? "Restock" : Model.Quantity == 0 ? "No stock" : "In stock")</span></div>
+    <dl class="details-grid">
+        <div><dt>Item code</dt><dd>@(string.IsNullOrWhiteSpace(Model.ItemCode) ? "—" : Model.ItemCode)</dd></div>
+        <div><dt>On-hand quantity</dt><dd class="detail-quantity">@Model.Quantity <small>units</small></dd></div>
+        <div><dt>Flavor</dt><dd>@(string.IsNullOrWhiteSpace(Model.Flavor) ? "—" : Model.Flavor)</dd></div>
+        <div><dt>Size</dt><dd>@(string.IsNullOrWhiteSpace(Model.Size) ? "—" : Model.Size)</dd></div>
+        <div><dt>Category</dt><dd>@(string.IsNullOrWhiteSpace(Model.Category) ? "—" : Model.Category)</dd></div>
+        <div><dt>Unit</dt><dd>@Model.Unit</dd></div>
+        <div><dt>Reorder level</dt><dd>@(Model.MinimumStock == 0 ? "Not set" : $"{Model.MinimumStock} units")</dd></div>
+        <div><dt>Unit price (PHP)</dt><dd>@(Model.Price == 0 ? "Not set" : Model.Price.ToString("C", System.Globalization.CultureInfo.GetCultureInfo("en-PH")))</dd></div>
+        <div><dt>Supplier</dt><dd>@(string.IsNullOrWhiteSpace(Model.Supplier) ? "—" : Model.Supplier)</dd></div>
+        <div><dt>Stock value</dt><dd>@(Model.Price == 0 ? "Not set" : (Model.Quantity * Model.Price).ToString("C", System.Globalization.CultureInfo.GetCultureInfo("en-PH")))</dd></div>
+    </dl>
+    <div class="detail-footer"><a class="text-link" asp-action="Index">← Back to products</a><a asp-controller="Transactions" asp-action="Index" class="text-link">View stock activity →</a></div>
+</section>

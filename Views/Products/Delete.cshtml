@@ -1,0 +1,37 @@
+@model Barks.Models.Product
+
+@{
+    ViewData["Title"] = "Delete product";
+    var hasStockHistory = ViewBag.HasStockHistory == true;
+}
+
+<div class="page-heading">
+    <div><p class="eyebrow">Product maintenance</p><h1>Delete product</h1><p class="page-subtitle">Review the product before removing it from inventory.</p></div>
+    <a class="button button-secondary" asp-action="Index">Back to products</a>
+</div>
+
+<section class="panel delete-panel">
+    <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+    @if (hasStockHistory)
+    {
+        <div class="error-banner" role="alert"><span>!</span>This product has stock activity. Deleting it would erase its audit history, so it cannot be removed.</div>
+    }
+    else
+    {
+        <div class="delete-warning"><span>!</span><div><strong>Are you sure you want to delete this product?</strong><p>This action cannot be undone.</p></div></div>
+    }
+    <dl class="details-grid">
+        <div><dt>Product</dt><dd>@Model.ProductName</dd></div>
+        <div><dt>Category</dt><dd>@(string.IsNullOrWhiteSpace(Model.Category) ? "—" : Model.Category)</dd></div>
+        <div><dt>On-hand quantity</dt><dd>@Model.Quantity units</dd></div>
+        <div><dt>Supplier</dt><dd>@(string.IsNullOrWhiteSpace(Model.Supplier) ? "—" : Model.Supplier)</dd></div>
+    </dl>
+    @if (!hasStockHistory)
+    {
+        <form asp-action="Delete" class="form-actions">
+            <input type="hidden" asp-for="ProductId" />
+            <button type="submit" class="button button-danger">Delete product</button>
+            <a asp-action="Index" class="text-link">Cancel</a>
+        </form>
+    }
+</section>
