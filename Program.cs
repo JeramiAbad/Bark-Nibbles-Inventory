@@ -8,6 +8,10 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
+if (string.IsNullOrWhiteSpace(builder.WebHost.GetSetting("urls")))
+{
+    builder.WebHost.UseUrls("http://0.0.0.0:5128");
+}
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

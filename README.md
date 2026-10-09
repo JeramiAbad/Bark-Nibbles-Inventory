@@ -26,15 +26,18 @@ git remote add origin https://github.com/JeramiAbad/Bark-Nibbles-Inventory.git
 git push -u origin main
 ```
 
-GitHub may ask you to authenticate through a browser or credential manager. Do not put a password or access token in the remote URL. Share the Windows installer by attaching `Bark-Nibbles-Inventory-Windows-x64.zip` to a GitHub Release, not by committing generated publish files.
+GitHub may ask you to authenticate through a browser or credential manager. Do not put a password or access token in the remote URL. The Windows installer contains a snapshot of the local business database. Distribute it only through a private GitHub Release or another secure channel to authorized users; never commit it to the source repository or publish it in a public release.
 
 ## Install on another Windows PC
 
-1. Download `Bark-Nibbles-Inventory-Windows-x64.zip` from the project's GitHub Release and extract it to a writable folder on the Windows x64 PC.
+1. Obtain the current `Bark-Nibbles-Inventory-Windows-x64.zip` from an authorized, secure distribution channel and extract **all** files to a writable folder on the Windows x64 PC. The ZIP contains a snapshot of the local database and its inventory records.
 2. Run `Start-Bark-Nibbles-Inventory.bat` and keep its window open while using the app.
-3. On that PC, open [http://localhost:5128](http://localhost:5128) and complete the one-time admin setup. Use a strong password of at least 12 characters.
+3. On that PC, open [http://localhost:5128](http://localhost:5128). If the included database has no admin account, complete the one-time setup using a strong password of at least 12 characters. Otherwise, sign in with the admin account already stored in the snapshot.
 4. To use a phone or another computer on the same Wi-Fi, open `http://<host-PC-IPv4>:5128` and sign in. Find the host PC's address by running `ipconfig` and reading the IPv4 address for its active Wi-Fi adapter.
 5. If Windows Firewall asks, allow access on **Private networks only**.
+
+If the startup window says `BarkNibblesInventory.exe` is not recognized, the package may not have been fully extracted or may be an older download. Use **Extract All...** on the current ZIP, then run the included startup script; it searches nested folders for the executable. The older `BarkNibbles-Windows-x64.zip` is a legacy package and does not include the local database snapshot.
+If the app reports port 5000 instead of 5128, run it with `Start-Bark-Nibbles-Inventory.bat`. The app now defaults to port 5128; explicit URL/port settings still take precedence.
 
 For complete installation steps, everyday usage, backup guidance, troubleshooting, and network limitations, see [USER-GUIDELINES.md](./USER-GUIDELINES.md).
 
@@ -44,6 +47,7 @@ For complete installation steps, everyday usage, backup guidance, troubleshootin
 - A device needs a route to the host, usually by joining the same trusted Wi-Fi/router. A different Wi-Fi network normally cannot connect directly.
 - The app uses HTTP, not HTTPS. Login credentials and session cookies are not encrypted in transit. Use only on a trusted private network; never use public Wi-Fi or expose port 5128 to the public internet.
 - Each separate installation has its own `inventory.db`; databases do not synchronize automatically.
+- The installer contains a copy of the local database as it existed when the ZIP was made, including its inventory records. Treat the ZIP as confidential business data and share it only with authorized people over a secure channel.
 - Back up `inventory.db` only after stopping the app.
 
 ## Development

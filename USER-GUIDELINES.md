@@ -10,12 +10,12 @@ The package is for **Windows x64** and includes its runtime. Visual Studio, .NET
 
 ## 2. Install and create the administrator
 
-1. Download `Bark-Nibbles-Inventory-Windows-x64.zip` from the project's GitHub Release and copy it to the host PC.
-2. Extract the ZIP into a folder where the user can write files, such as `Documents\BarkNibbles`. Do not run the app from inside the ZIP.
+1. Download `Bark-Nibbles-Inventory-Windows-x64.zip` from the project's GitHub Release and copy it to the host PC. The ZIP contains a snapshot of the local database and its inventory records; only share it with authorized people using a secure channel.
+2. In File Explorer, right-click the ZIP, choose **Extract All...**, and extract **all** contents into a writable folder, such as `Documents\BarkNibbles`. Do not run the batch file from inside the ZIP or copy it out by itself.
 3. Open the extracted folder and run `Start-Bark-Nibbles-Inventory.bat`.
 4. Keep the command window open while the inventory is in use.
 5. On the host PC, open [http://localhost:5128](http://localhost:5128).
-6. The first-run setup page is only available from the host PC. Create the single admin account with a username and a strong password of at least 12 characters, then confirm the password.
+6. If this database snapshot does not already have an admin account, the first-run setup page is only available from the host PC. Create the single admin account with a username and a strong password of at least 12 characters, then confirm the password. If the snapshot already contains an admin account, sign in with that account instead.
 
 There is no public registration or additional staff account. The administrator login is required to use the dashboard and inventory.
 
@@ -45,9 +45,9 @@ Devices on another Wi-Fi network normally cannot reach the host directly. The ho
 
 ## 5. Database, changes, and backups
 
-- The app creates `inventory.db` in the extracted application folder the first time it starts. It also creates the database tables and initial 30-product catalog.
+- The ZIP includes `inventory.db`, copied from the project PC when the package was prepared. That database includes the inventory records present at that time. If you run a package without a database, the app creates one and seeds the initial 30-product catalog.
 - All browser sessions connected to the **same running host app** see and update that host's database.
-- Installing the package on another PC creates a separate database. Data does not automatically copy, sync, or merge between installations.
+- Each extracted installation starts with a separate copy of the database snapshot. Changes made on one PC do not automatically copy, sync, or merge into another installation.
 - To back up the inventory, stop the app first by closing its command window, then copy `inventory.db` to a safe location. Keep backups private because they contain business data. Restart the app by running `Start-Bark-Nibbles-Inventory.bat`.
 - Do not delete or replace `inventory.db` to troubleshoot without first making a backup.
 
@@ -56,13 +56,16 @@ Devices on another Wi-Fi network normally cannot reach the host directly. The ho
 - There is one admin account. Passwords are stored as password hashes, and repeated login attempts are rate-limited.
 - The package serves **HTTP, not HTTPS**. Credentials and session cookies are not encrypted in transit. Use this only on a trusted private Wi-Fi network—not public Wi-Fi.
 - Do not expose the host through router port forwarding or use it as a public internet website. The app is intended for a trusted local network.
-- Use a unique, strong admin password and keep it private. Sign out on shared devices.
+- Use a unique, strong admin password and keep it private. Sign out on shared devices. The ZIP includes business data, so protect the file and do not post it in a public repository.
 
 ## 7. Troubleshooting
 
 **The page does not load on the host PC**
 
 - Check that `Start-Bark-Nibbles-Inventory.bat` is still running and its window has not been closed.
+- If the command window says `BarkNibblesInventory.exe is not recognized` or cannot be found, the package may not have been fully extracted or may be an older download. Use **Extract All...** on the current `Bark-Nibbles-Inventory-Windows-x64.zip`, then run `Start-Bark-Nibbles-Inventory.bat` from the extracted folder. The current launcher searches nested folders for the executable.
+- If the app reports `http://localhost:5000`, stop it and start it with `Start-Bark-Nibbles-Inventory.bat` from the current package. The expected address is `http://localhost:5128`; the launcher also prints it in its command window. If you started the app directly, use the newer package or pass the intended URL explicitly.
+- Use the current `Bark-Nibbles-Inventory-Windows-x64.zip`. The older `BarkNibbles-Windows-x64.zip` is a legacy package with an older name and no local database snapshot.
 - Try `http://localhost:5128` on the host PC.
 - If the command window reports that port 5128 is already in use, close the other app using it or restart the host PC.
 
@@ -104,4 +107,4 @@ git remote add origin https://github.com/JeramiAbad/Bark-Nibbles-Inventory.git
 git push -u origin main
 ```
 
-GitHub may ask you to sign in through a browser or credential manager. Never put a password or access token in the remote URL. Publish the Windows installer as an asset on a GitHub Release; do not commit build outputs.
+GitHub may ask you to sign in through a browser or credential manager. Never put a password or access token in the remote URL. Publish the Windows installer as an asset on a **private** GitHub Release or another authorized secure channel; the installer contains a copy of the business database. Do not commit the installer or build outputs to the source repository.
