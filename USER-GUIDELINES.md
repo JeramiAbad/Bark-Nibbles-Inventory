@@ -2,6 +2,17 @@
 
 This guide explains how to install the app on a Windows PC and use it from other devices over Wi-Fi.
 
+## Connect to the currently running app
+
+The app currently running on the host PC is available at [http://localhost:5128](http://localhost:5128). Open that address **on the host PC** and sign in with the administrator account already created for this inventory.
+
+To use this same app from another device, leave the host PC and its app running and open the appropriate address in the other device's browser:
+
+- **Same trusted Wi-Fi:** `http://<host-PC-IPv4>:5128`. Find the host PC's IPv4 address by running `ipconfig` on that PC.
+- **Different Wi-Fi:** connect both devices to the same authorized Tailscale network and use `http://<host-Tailscale-IP>:5128`. Follow the VPN and firewall steps in section 3 below.
+
+This connects to the host's existing app and database. Do not install or start another package to connect a client device; a separate installation creates a separate, initially empty database.
+
 ## 1. Choose the host PC
 
 Choose the PC that will keep the inventory database and run the app. It needs to stay powered on, connected to the network, and running Bark Nibbles Inventory whenever other devices need access.
@@ -10,12 +21,11 @@ The package is for **Windows x64** and includes its runtime. Visual Studio, .NET
 
 ## 2. Install and create the administrator
 
-1. Download `Bark-Nibbles-Inventory-Windows-x64-No-Database.zip` from the project repository and copy it to the host PC. This package does not contain a database; the app creates a fresh database and seeds the initial catalog when started. If you were separately given an authorized database snapshot package, keep it private and share it only through a secure channel.
+1. Download `Bark-Nibbles-Inventory-Windows-x64-No-Database.zip` from the project repository and copy it to the host PC. This package does not contain a database; the app creates a fresh database and seeds the initial catalog when started. This is a separate installation, not a way to connect to the app already running on another PC. If you were separately given an authorized database snapshot package, keep it private and share it only through a secure channel.
 2. In File Explorer, right-click the ZIP, choose **Extract All...**, and extract **all** contents into a writable folder, such as `Documents\BarkNibbles`. Do not run the batch file from inside the ZIP or copy it out by itself.
-3. Open the extracted folder and run `Start-Bark-Nibbles-Inventory.bat`.
+3. Open the extracted folder and double-click **00 - START HERE.bat** (the first file in the folder). You can also run `Start-Bark-Nibbles-Inventory.bat` directly.
 4. Keep the command window open while the inventory is in use.
-5. On the host PC, open [http://localhost:5128](http://localhost:5128).
-6. On first run, the setup page is only available from the host PC. Create the single admin account with a username and a strong password of at least 12 characters, then confirm the password.
+5. On the host PC, double-click **01 - OPEN APP IN BROWSER.url** to open the app at `http://localhost:5128`. You can also type that address into a browser. If an admin account already exists, sign in with it. Otherwise, on first run, create the single admin account with a username and a strong password of at least 12 characters, then confirm the password. Initial setup is available only from the host PC.
 
 There is no public registration or additional staff account. The administrator login is required to use the dashboard and inventory.
 

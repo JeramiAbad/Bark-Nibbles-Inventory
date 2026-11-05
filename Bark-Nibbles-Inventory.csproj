@@ -11,7 +11,12 @@
   <ItemGroup>
     <Content Remove="dist\**" />
     <None Remove="dist\**" />
+    <Content Remove="artifacts\**" />
+    <None Remove="artifacts\**" />
     <None Update="Configure-Bark-Nibbles-VPN-Firewall.ps1" CopyToPublishDirectory="PreserveNewest" />
+    <None Update="DEPLOYMENT.md" CopyToPublishDirectory="PreserveNewest" />
+    <None Update="00 - START HERE.bat" CopyToPublishDirectory="PreserveNewest" />
+    <None Update="01 - OPEN APP IN BROWSER.url" CopyToPublishDirectory="PreserveNewest" />
     <None Update="README.md" CopyToPublishDirectory="PreserveNewest" />
     <None Update="Start-Bark-Nibbles-Inventory.bat" CopyToPublishDirectory="PreserveNewest" />
     <None Update="USER-GUIDELINES.md" CopyToPublishDirectory="PreserveNewest" />

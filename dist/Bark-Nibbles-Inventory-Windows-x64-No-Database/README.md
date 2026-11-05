@@ -28,13 +28,25 @@ git push -u origin main
 
 GitHub may ask you to authenticate through a browser or credential manager. Do not put a password or access token in the remote URL. Never commit or publicly publish `inventory.db` or any archive containing it; it holds business records. The `dist/Bark-Nibbles-Inventory-Windows-x64-No-Database.zip` package is safe to publish and creates a fresh database on first run. Keep any database snapshot package separate and share it only through an authorized, secure channel.
 
+## Connect to the app that is running now
+
+The current app is hosted on the PC running Bark Nibbles Inventory at [http://localhost:5128](http://localhost:5128). On that PC, open the link and sign in with the existing administrator account. The app is already set up, so use **Sign in** rather than creating another account.
+
+To connect another device, do **not** install another copy of the app on that device. Keep the host PC and app running, and open the host app in the device's browser:
+
+- On the same trusted Wi-Fi, use `http://<host-PC-IPv4>:5128`. Find the host's address by running `ipconfig` on that PC.
+- From a different Wi-Fi, connect the host and authorized device to the same private Tailscale network, then use `http://<host-Tailscale-IP>:5128`. Configure the host firewall with the included script as described in [User Guidelines](./USER-GUIDELINES.md).
+
+Both URLs open the same running app and inventory database. The VPN setup encrypts remote traffic. Do not expose port 5128 to the public internet.
+
 ## Install on another Windows PC
 
 1. Obtain `Bark-Nibbles-Inventory-Windows-x64-No-Database.zip` from the project's GitHub repository and extract **all** files to a writable folder on the Windows x64 PC. This public-safe package has no database; the app creates a fresh database and seeds the initial catalog on first run. A separate authorized package may contain a private database snapshot—never publish or share it publicly.
-2. Run `Start-Bark-Nibbles-Inventory.bat` and keep its window open while using the app.
-3. On that PC, open [http://localhost:5128](http://localhost:5128) and complete the one-time admin setup using a strong password of at least 12 characters.
-4. To use a phone or another computer on the same Wi-Fi, open `http://<host-PC-IPv4>:5128` and sign in. Find the host PC's address by running `ipconfig` and reading the IPv4 address for its active Wi-Fi adapter.
-5. If Windows Firewall asks, allow access on **Private networks only**.
+2. Double-click **00 - START HERE.bat** (the first file in the folder) and keep its window open while using the app. You can also run `Start-Bark-Nibbles-Inventory.bat` directly.
+3. On the host PC, double-click **01 - OPEN APP IN BROWSER.url** to open `http://localhost:5128`. For this separate installation, create its initial admin account with a strong password of at least 12 characters.
+4. To use a phone or another computer on the same Wi-Fi, open `http://<host-PC-IPv4>:5128` in that device's browser and sign in. Find the host PC's address by running `ipconfig` and reading the IPv4 address for its active Wi-Fi adapter.
+5. To connect from a different Wi-Fi, use the private VPN instructions above and in [User Guidelines](./USER-GUIDELINES.md).
+6. If Windows Firewall asks about local-network access, allow it on **Private networks only**.
 
 If the startup window says `BarkNibblesInventory.exe` is not recognized, the package may not have been fully extracted or may be an older download. Use **Extract All...** on the current ZIP, then run the included startup script; it searches nested folders for the executable. The older `BarkNibbles-Windows-x64.zip` is a legacy package and does not include the local database snapshot.
 If the app reports port 5000 instead of 5128, run it with `Start-Bark-Nibbles-Inventory.bat`. The app now defaults to port 5128; explicit URL/port settings still take precedence.
