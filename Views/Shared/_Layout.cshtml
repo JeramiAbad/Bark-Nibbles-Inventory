@@ -13,7 +13,6 @@
     @{
         var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
         var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
-        var transactionType = ViewContext.HttpContext.Request.Query["transactionType"].ToString();
     }
     <aside class="sidebar">
         <a class="sidebar-brand" asp-controller="Home" asp-action="Index">
@@ -24,15 +23,17 @@
         <nav class="sidebar-nav" aria-label="Inventory navigation">
             <a class="@(currentController == "Home" ? "nav-active" : "")" aria-current="@(currentController == "Home" ? "page" : null)" asp-controller="Home" asp-action="Index"><span class="side-icon">▦</span>Dashboard</a>
             <a class="@(currentController == "Products" ? "nav-active" : "")" aria-current="@(currentController == "Products" ? "page" : null)" asp-controller="Products" asp-action="Index"><span class="side-icon">▤</span>Products</a>
-            <a class="@(currentController == "Transactions" && currentAction == "Create" && transactionType != "Stock Out" ? "nav-active" : "")" aria-current="@(currentController == "Transactions" && currentAction == "Create" && transactionType != "Stock Out" ? "page" : null)" asp-controller="Transactions" asp-action="Create" asp-route-transactionType="Stock In"><span class="side-icon">↓</span>Stock In</a>
-            <a class="@(currentController == "Transactions" && currentAction == "Create" && transactionType == "Stock Out" ? "nav-active" : "")" aria-current="@(currentController == "Transactions" && currentAction == "Create" && transactionType == "Stock Out" ? "page" : null)" asp-controller="Transactions" asp-action="Create" asp-route-transactionType="Stock Out"><span class="side-icon">↑</span>Stock Out</a>
+            <a class="@(currentController == "Transactions" && currentAction == "Create" ? "nav-active" : "")" aria-current="@(currentController == "Transactions" && currentAction == "Create" ? "page" : null)" asp-controller="Transactions" asp-action="Create"><span class="side-icon">↕</span>Stock In/Out</a>
             <a class="@(currentController == "Transactions" && currentAction == "Index" ? "nav-active" : "")" aria-current="@(currentController == "Transactions" && currentAction == "Index" ? "page" : null)" asp-controller="Transactions" asp-action="Index"><span class="side-icon">↔</span>Transactions</a>
+            <a class="@(currentController == "Account" && currentAction == "Settings" ? "nav-active" : "")" aria-current="@(currentController == "Account" && currentAction == "Settings" ? "page" : null)" asp-controller="Account" asp-action="Settings"><span class="side-icon">⚙</span>Account settings</a>
         </nav>
         <div class="sidebar-spacer"></div>
         <div class="sidebar-note">
             <span class="sidebar-note-icon">✳</span>
-            <strong>Small batches.<br />Big tail wags.</strong>
-            <span>Keep the good stuff in stock.</span>
+            <div class="sidebar-note-content">
+                <strong>Small batches.<br />Big tail wags.</strong>
+                <span>Keep the good stuff in stock.</span>
+            </div>
         </div>
         <div class="sidebar-user">
             <span class="user-avatar">BN</span>

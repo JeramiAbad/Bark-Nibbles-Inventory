@@ -41,10 +41,11 @@ button, input, select { font: inherit; }
 .side-icon { display: grid; width: 19px; place-items: center; color: #b9c8ba; font-size: 17px; }
 .nav-active .side-icon { color: #f0a17c; }
 .sidebar-spacer { flex: 1; min-height: 30px; }
-.sidebar-note { display: flex; flex-direction: column; align-items: flex-start; gap: 7px; margin: 0 2px 18px; padding: 16px 13px; border: 1px solid rgba(255,255,255,.1); border-radius: 6px; background: rgba(255,255,255,.055); }
+.sidebar-note { display: flex; align-items: flex-start; justify-content: flex-end; gap: 9px; margin: 0 2px 18px; padding: 16px 13px; border: 1px solid rgba(255,255,255,.1); border-radius: 6px; background: rgba(255,255,255,.055); text-align: right; }
 .sidebar-note-icon { display: grid; width: 24px; height: 24px; place-items: center; border-radius: 6px; background: rgba(231,131,89,.18); color: #f0a17c; font-size: 15px; }
+.sidebar-note-content { display: grid; justify-items: end; gap: 7px; }
 .sidebar-note strong { font-family: var(--display); font-size: 12px; line-height: 1.45; }
-.sidebar-note > span:last-child { color: #b8c4b9; font-size: 10px; }
+.sidebar-note-content > span { color: #b8c4b9; font-size: 10px; }
 .sidebar-user { display: flex; align-items: center; gap: 9px; padding: 13px 4px 2px; border-top: 1px solid rgba(255,255,255,.12); }
 .user-avatar { display: grid; width: 31px; height: 31px; place-items: center; border-radius: 50%; background: #e99a73; color: #fff; font-size: 10px; font-weight: 700; }
 .sidebar-user > span:nth-child(2) { display: grid; flex: 1; gap: 2px; }
@@ -185,6 +186,20 @@ button, input, select { font: inherit; }
 .product-card-details dt { color: #899289; font-size: 8px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
 .product-card-details dd { margin: 3px 0 0; color: #505950; font-size: 10px; line-height: 1.4; overflow-wrap: anywhere; }
 .product-card-actions { display: flex; justify-content: flex-end; gap: 5px; padding-top: 9px; border-top: 1px solid #f0f2ef; }
+.product-carousel-section { margin: 0 0 20px; padding: 16px; border: 1px solid #e8ebe6; border-radius: 6px; background: var(--surface); }
+.product-carousel-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.product-carousel-heading .eyebrow { margin: 0 0 3px; }
+.product-carousel-heading h2 { margin: 0; font-family: var(--display); font-size: 15px; }
+.product-carousel-controls { display: flex; gap: 6px; }
+.product-carousel { display: flex; gap: 14px; overflow-x: auto; padding-bottom: 4px; scroll-snap-type: x mandatory; scrollbar-color: #cbd4c8 transparent; scrollbar-width: thin; }
+.product-carousel-card { flex: 0 0 calc((100% - 14px) / 2); min-width: 0; overflow: hidden; border: 1px solid #e8ebe6; border-radius: 5px; background: #fbfcfa; scroll-snap-align: start; }
+.product-carousel-image { position: relative; display: grid; height: 190px; place-items: center; overflow: hidden; background: #f0f3ee; }
+.product-carousel-image img { width: 100%; height: 100%; object-fit: cover; }
+.product-image-placeholder { color: #b6c1b4; font-family: var(--display); font-size: 46px; font-weight: 700; }
+.product-image-prompt { position: absolute; right: 9px; bottom: 9px; padding: 5px 8px; border-radius: 12px; background: rgba(42,59,46,.76); color: white; font-size: 9px; }
+.product-carousel-caption { display: flex; min-height: 42px; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 11px; }
+.product-carousel-caption strong { overflow: hidden; color: #424a42; font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
+.product-carousel-caption a { flex: 0 0 auto; color: #5e795f; font-size: 9px; font-weight: 700; }
 .account-page { display: grid; min-height: 100vh; place-items: center; padding: 24px; background: radial-gradient(ellipse at top, #edf2eb, var(--canvas) 65%); }
 .account-card { width: min(100%, 420px); padding: 30px; border: 1px solid #e8ebe6; border-radius: 8px; background: var(--surface); box-shadow: 0 16px 50px rgba(41,57,47,.08); }
 .account-brand { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 28px; color: var(--green-dark); font-family: var(--display); font-size: 19px; font-weight: 800; line-height: .95; letter-spacing: -1px; }
@@ -200,7 +215,15 @@ button, input, select { font: inherit; }
 .account-form .form-field input { min-height: 40px; padding: 0 11px; border: 1px solid #dfe5dd; border-radius: 4px; background: #fff; color: #3c453d; font-size: 12px; }
 .account-form .form-field input:focus { border-color: #819582; outline: 3px solid rgba(96,125,104,.13); }
 .account-submit { width: 100%; min-height: 42px; margin-top: 3px; font-size: 11px; }
+.account-recovery-link { margin: 13px 0 0; text-align: center; font-size: 10px; }
+.account-recovery-link a { color: var(--green-dark); font-weight: 700; text-decoration: underline; text-underline-offset: 2px; }
+.account-success { margin: 0 0 15px; padding: 10px 12px; border: 1px solid #d6e5d3; border-radius: 4px; background: #f5faf3; color: #536e56; font-size: 10px; line-height: 1.5; }
 .account-note { margin: 18px 0 0; padding-top: 13px; border-top: 1px solid #eef0ec; color: #818981; font-size: 9px; line-height: 1.6; }
+.account-settings-panel { max-width: 760px; }
+.account-settings-help { margin: 15px 0; color: var(--muted); font-size: 11px; line-height: 1.6; }
+.account-settings-form { padding-top: 0; }
+.account-settings-form .form-field input { max-width: 460px; }
+.account-settings-actions { grid-column: 1 / -1; }
 .validation-summary:empty { display: none; }
 .validation-summary:not(:empty) { margin: 0 0 15px; padding: 10px 12px; border: 1px solid #efd4ce; border-radius: 4px; background: #fff7f5; color: #a45f53; font-size: 10px; }
 .validation-summary ul { margin: 0; padding-left: 16px; }
@@ -229,6 +252,9 @@ button, input, select { font: inherit; }
 .form-note > span { color: #6d866e; font-size: 14px; }
 .form-actions { grid-column: 1 / -1; display: flex; align-items: center; gap: 15px; margin-top: 3px; padding-top: 16px; border-top: 1px solid #eef0ec; }
 .form-actions .text-link { color: #777f77; font-size: 9px; }
+.product-image-upload { grid-column: 1 / -1; }
+.product-image-upload input[type="file"] { max-width: 100%; padding: 8px; border: 1px solid #e6eae4; border-radius: 4px; background: #fff; font-size: 10px; }
+.product-image-preview { width: 160px; height: 120px; border: 1px solid #e8ebe6; border-radius: 5px; object-fit: cover; }
 .adjustment-panel { max-width: 660px; padding: 25px; }
 .adjustment-form { grid-template-columns: 1fr; gap: 21px; }
 .movement-field { display: grid; min-width: 0; margin: 0; padding: 0; border: 0; }

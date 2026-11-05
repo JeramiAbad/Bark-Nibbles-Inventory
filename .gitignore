@@ -9,6 +9,7 @@ inventory.db
 inventory.db-shm
 inventory.db-wal
 inventory.db-journal
+/wwwroot/uploads/products/
 
 ## Generated installers and publish output
 dist/

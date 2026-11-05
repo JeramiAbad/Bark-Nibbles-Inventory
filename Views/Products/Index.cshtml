@@ -13,6 +13,41 @@
     <a class="button button-primary" asp-action="Create">＋ &nbsp; Add product</a>
 </div>
 
+@if (Model.Products.Count > 0)
+{
+    <section class="product-carousel-section" aria-label="Product photos">
+        <div class="product-carousel-heading">
+            <div><p class="eyebrow">On the shelf</p><h2>Product photos</h2></div>
+            <div class="product-carousel-controls">
+                <button class="row-action" type="button" data-carousel-direction="-1" aria-label="Scroll products left">←</button>
+                <button class="row-action" type="button" data-carousel-direction="1" aria-label="Scroll products right">→</button>
+            </div>
+        </div>
+        <div class="product-carousel" id="product-carousel" tabindex="0" aria-label="Scroll horizontally through products">
+            @foreach (var product in Model.Products)
+            {
+                <article class="product-carousel-card">
+                    <a class="product-carousel-image" asp-action="Edit" asp-route-id="@product.ProductId" aria-label="Add or change photo for @product.ProductName">
+                        @if (!string.IsNullOrWhiteSpace(product.ImagePath))
+                        {
+                            <img src="@product.ImagePath" alt="@product.ProductName" loading="lazy" />
+                        }
+                        else
+                        {
+                            <span class="product-image-placeholder" aria-hidden="true">@(string.IsNullOrEmpty(product.ProductName) ? "?" : product.ProductName[..1])</span>
+                            <span class="product-image-prompt">Add photo</span>
+                        }
+                    </a>
+                    <div class="product-carousel-caption">
+                        <strong>@product.ProductName</strong>
+                        <a asp-action="Edit" asp-route-id="@product.ProductId">@(string.IsNullOrWhiteSpace(product.ImagePath) ? "Upload photo" : "Change photo")</a>
+                    </div>
+                </article>
+            }
+        </div>
+    </section>
+}
+
 <section class="panel page-panel">
     <div class="panel-heading product-list-heading">
         <div><p class="panel-kicker">The inventory shelf</p><h2>All products <span class="inline-count">@Model.Products.Count</span></h2></div>
@@ -118,3 +153,20 @@
         </div>
     }
 </section>
+
+@section Scripts {
+    <script>
+        const productCarousel = document.getElementById("product-carousel");
+        document.querySelectorAll("[data-carousel-direction]").forEach(button => {
+            button.addEventListener("click", () => {
+                if (!productCarousel) return;
+                const card = productCarousel.querySelector(".product-carousel-card");
+                const distance = card ? card.getBoundingClientRect().width + 14 : productCarousel.clientWidth;
+                productCarousel.scrollBy({
+                    left: Number(button.dataset.carouselDirection) * distance,
+                    behavior: "smooth"
+                });
+            });
+        });
+    </script>
+}

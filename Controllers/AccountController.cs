@@ -137,6 +137,119 @@ public class AccountController : Controller
         return RedirectToAction("Index", "Home");
     }
 
+    [AllowAnonymous]
+    public async Task<IActionResult> ForgotPassword()
+    {
+        if (!IsLocalRequest())
+        {
+            return StatusCode(StatusCodes.Status403Forbidden);
+        }
+
+        if (!await AdminAccountExistsAsync())
+        {
+            return RedirectToAction(nameof(Setup));
+        }
+
+        return View(new AdminPasswordResetViewModel());
+    }
+
+    [HttpPost]
+    [AllowAnonymous]
+    [ValidateAntiForgeryToken]
+    [EnableRateLimiting("admin-login")]
+    public async Task<IActionResult> ForgotPassword(AdminPasswordResetViewModel model)
+    {
+        if (!IsLocalRequest())
+        {
+            return StatusCode(StatusCodes.Status403Forbidden);
+        }
+
+        if (!await AdminAccountExistsAsync())
+        {
+            return RedirectToAction(nameof(Setup));
+        }
+
+        model.Username = model.Username?.Trim() ?? string.Empty;
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
+
+        var admin = await _context.AdminAccounts
+            .SingleOrDefaultAsync(account => account.AdminAccountId == 1
+                && account.Username == model.Username);
+        if (admin == null)
+        {
+            ModelState.AddModelError(string.Empty, "The username does not match the admin account.");
+            return View(model);
+        }
+
+        admin.PasswordHash = _passwordHasher.HashPassword(admin, model.Password);
+        await _context.SaveChangesAsync();
+
+        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        TempData["StatusMessage"] = "Your password was reset. Sign in with your new password.";
+        return RedirectToAction(nameof(Login));
+    }
+
+    public async Task<IActionResult> Settings()
+    {
+        var admin = await _context.AdminAccounts
+            .SingleOrDefaultAsync(account => account.AdminAccountId == 1);
+        if (admin == null)
+        {
+            return RedirectToAction(nameof(Setup));
+        }
+
+        return View(new AdminAccountSettingsViewModel { Username = admin.Username });
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [EnableRateLimiting("admin-login")]
+    public async Task<IActionResult> Settings(AdminAccountSettingsViewModel model)
+    {
+        model.Username = model.Username?.Trim() ?? string.Empty;
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
+
+        var admin = await _context.AdminAccounts
+            .SingleOrDefaultAsync(account => account.AdminAccountId == 1);
+        if (admin == null)
+        {
+            return RedirectToAction(nameof(Setup));
+        }
+
+        if (_passwordHasher.VerifyHashedPassword(admin, admin.PasswordHash, model.CurrentPassword)
+            == PasswordVerificationResult.Failed)
+        {
+            ModelState.AddModelError(nameof(model.CurrentPassword), "The current password is incorrect.");
+            return View(model);
+        }
+
+        var usernameChanged = !string.Equals(admin.Username, model.Username, StringComparison.Ordinal);
+        if (usernameChanged)
+        {
+            admin.Username = model.Username;
+        }
+
+        if (!string.IsNullOrEmpty(model.NewPassword))
+        {
+            admin.PasswordHash = _passwordHasher.HashPassword(admin, model.NewPassword);
+        }
+
+        await _context.SaveChangesAsync();
+        if (usernameChanged)
+        {
+            await SignInAdminAsync(admin);
+        }
+
+        TempData["Success"] = "Account settings updated.";
+        return RedirectToAction(nameof(Settings));
+    }
+
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Logout()

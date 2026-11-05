@@ -31,14 +31,32 @@ Use Chrome, Edge, Safari, or Firefox. The responsive pages adapt to phone screen
 
 ### Using a different Wi-Fi network
 
-Devices on another Wi-Fi network normally cannot reach the host directly. The host and client need to share a trusted network with a route between them. If remote access is needed, use a properly secured private VPN and configure the host firewall for that private connection. Do **not** forward port 5128 on the router or expose the app directly to the internet.
+To connect from outside the host's Wi-Fi, use a private VPN such as Tailscale. Install it on the host PC and each authorized phone or computer, sign them in to the same private tailnet, and ensure the tailnet access policy permits only the devices or people who need the inventory. Keep the host PC running and connected to Tailscale.
+
+On the host PC, open PowerShell **as administrator** in the extracted app folder and run:
+
+```powershell
+.\Configure-Bark-Nibbles-VPN-Firewall.ps1
+```
+
+This adds a Windows Firewall rule for TCP port 5128 restricted to Tailscale IPv4 addresses (`100.64.0.0/10`); it does not open the port to arbitrary internet clients. In Tailscale, find the host PC's Tailscale IPv4 address (or run `tailscale ip -4` on the host). On a device connected to the same authorized tailnet, open `http://<host-Tailscale-IP>:5128` and sign in. The VPN encrypts traffic between devices; do not use the app over untrusted networks without the VPN.
+
+To remove the firewall rule later, run PowerShell as administrator and execute:
+
+```powershell
+Remove-NetFirewallRule -DisplayName "Bark Nibbles Inventory (Tailscale)"
+```
+
+Do **not** forward port 5128 on the router or expose the app directly to the internet. If you use another VPN, configure its firewall policy to allow only its authenticated private peers instead of using the Tailscale-specific script.
 
 ## 4. Products and stock
 
 - **Products** lists the catalog. Use search and the low-stock filter to find items. Add, edit, view, or delete products using the available actions.
+- Product photos appear in the horizontal carousel above the product list. Upload or replace a photo from a product’s **Edit** page; JPEG, PNG, and WebP files up to 5 MB are supported.
 - **Stock In** records received or added quantity.
 - **Stock Out** records quantity removed or sold. The app prevents removing more than the recorded quantity on hand.
 - **Transactions** shows the stock movement history.
+- **Account settings** in the sidebar lets the administrator update the username and password. Confirm the current password to save; leave the new password fields blank when only changing the username. New passwords must be at least 12 characters.
 - The dashboard summarizes product count, stock quantity/value, restock alerts, and recent movements.
 - Set a product's reorder level to enable its low-stock alert. A blank/unset value is shown as “—”.
 - Product prices are displayed in Philippine pesos (PHP). Confirm the price and stock values against your business records.
@@ -48,15 +66,16 @@ Devices on another Wi-Fi network normally cannot reach the host directly. The ho
 - The public-safe `Bark-Nibbles-Inventory-Windows-x64-No-Database.zip` contains no `inventory.db`; the app creates one on first run and seeds the initial 30-product catalog. A separate snapshot package may include business records and must never be published publicly.
 - All browser sessions connected to the **same running host app** see and update that host's database.
 - Each extracted installation has its own database. Changes made on one PC do not automatically copy, sync, or merge into another installation.
-- To back up the inventory, stop the app first by closing its command window, then copy `inventory.db` to a safe location. Keep backups private because they contain business data. Restart the app by running `Start-Bark-Nibbles-Inventory.bat`.
+- To back up the inventory, stop the app first by closing its command window, then copy `inventory.db` and the `wwwroot\uploads\products` folder to a safe location. Keep backups private because they contain business data and product photos. Restart the app by running `Start-Bark-Nibbles-Inventory.bat`.
 - Do not delete or replace `inventory.db` to troubleshoot without first making a backup.
 
 ## 6. Security
 
 - There is one admin account. Passwords are stored as password hashes, and repeated login attempts are rate-limited.
-- The package serves **HTTP, not HTTPS**. Credentials and session cookies are not encrypted in transit. Use this only on a trusted private Wi-Fi network—not public Wi-Fi.
-- Do not expose the host through router port forwarding or use it as a public internet website. The app is intended for a trusted local network.
-- Use a unique, strong admin password and keep it private. Sign out on shared devices. Keep any database snapshot package private; do not post it or `inventory.db` in a public repository.
+- If you forget the password, use **Forgot your password?** on the login page from the host PC at `http://localhost:5128`. Enter the admin username and set a new password of at least 12 characters. Password resets are blocked from phones and other network devices.
+- The package serves **HTTP, not HTTPS**. Use it only on a trusted local network or inside an authenticated VPN, which encrypts traffic between devices. Do not visit it over public Wi-Fi without the VPN.
+- Do not expose the host through router port forwarding or use it as a public internet website. For remote use, limit access through a private VPN and its device/user access policy.
+- Use a unique, strong admin password and keep it private. Sign out on shared devices. Keep any database snapshot and product photos private; do not post them or `inventory.db` in a public repository.
 
 ## 7. Troubleshooting
 
@@ -76,6 +95,13 @@ Devices on another Wi-Fi network normally cannot reach the host directly. The ho
 - Check that the URL uses `http://` and ends with `:5128`.
 - Check Windows Firewall and allow the app on a trusted **Private** network.
 - Some guest Wi-Fi networks block devices from seeing each other. Use the normal private Wi-Fi instead.
+
+**The page does not load from another Wi-Fi network**
+
+- Confirm Tailscale is installed and connected on both the host and client, and both are on the same authorized tailnet.
+- On the host, run the included firewall configuration script as administrator.
+- Use the host's Tailscale IPv4 address with port `5128`, not its local Wi-Fi address.
+- Check the tailnet access policy and ensure the host app is still running.
 
 **The host PC's IP address changed**
 

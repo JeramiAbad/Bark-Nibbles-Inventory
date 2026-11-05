@@ -52,6 +52,9 @@ namespace Barks.Migrations
                         .HasMaxLength(120)
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("ImagePath")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("ItemCode")
                         .HasMaxLength(32)
                         .HasColumnType("TEXT");

@@ -1,0 +1,48 @@
+@model Barks.Models.ViewModels.AdminAccountSettingsViewModel
+@{
+    ViewData["Title"] = "Account settings";
+}
+<section class="page-heading">
+    <div>
+        <p class="eyebrow">Administrator</p>
+        <h1>Account settings</h1>
+        <p class="page-subtitle">Update your admin username or password.</p>
+    </div>
+</section>
+
+<section class="form-panel account-settings-panel" aria-labelledby="account-settings-heading">
+    <div class="panel-heading">
+        <div>
+            <p class="eyebrow">Sign-in details</p>
+            <h2 id="account-settings-heading">Manage your account</h2>
+        </div>
+    </div>
+    <p class="account-settings-help">Enter your current password to save changes. Leave the new password fields blank if you only want to change your username. New passwords must be at least 12 characters.</p>
+    <div asp-validation-summary="ModelOnly" class="validation-summary" role="alert"></div>
+    <form asp-action="Settings" method="post" class="product-form account-settings-form">
+        <div class="form-field">
+            <label asp-for="Username"></label>
+            <input asp-for="Username" autocomplete="username" />
+            <span asp-validation-for="Username" class="field-error"></span>
+        </div>
+        <div class="form-field">
+            <label asp-for="CurrentPassword"></label>
+            <input asp-for="CurrentPassword" autocomplete="current-password" />
+            <span asp-validation-for="CurrentPassword" class="field-error"></span>
+        </div>
+        <div class="form-field">
+            <label asp-for="NewPassword"></label>
+            <input asp-for="NewPassword" autocomplete="new-password" />
+            <span asp-validation-for="NewPassword" class="field-error"></span>
+        </div>
+        <div class="form-field">
+            <label asp-for="ConfirmPassword"></label>
+            <input asp-for="ConfirmPassword" autocomplete="new-password" />
+            <span asp-validation-for="ConfirmPassword" class="field-error"></span>
+        </div>
+        <div class="form-actions account-settings-actions">
+            <a class="button button-secondary" asp-controller="Home" asp-action="Index">Cancel</a>
+            <button class="button button-primary" type="submit">Save changes</button>
+        </div>
+    </form>
+</section>

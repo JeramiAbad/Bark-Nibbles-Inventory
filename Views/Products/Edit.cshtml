@@ -10,9 +10,19 @@
 </div>
 
 <section class="panel form-panel">
-    <form asp-action="Edit" class="product-form">
+    <form asp-action="Edit" method="post" enctype="multipart/form-data" class="product-form">
         <input type="hidden" asp-for="ProductId" />
         <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+        <div class="form-field product-image-upload">
+            <label for="image">Product photo</label>
+            @if (!string.IsNullOrWhiteSpace(Model.ImagePath))
+            {
+                <img class="product-image-preview" src="@Model.ImagePath" alt="Current photo of @Model.ProductName" />
+            }
+            <input id="image" name="image" type="file" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" />
+            <small>Optional · JPEG, PNG, or WebP · Up to 5 MB. Choosing a new photo replaces the current one.</small>
+            <span class="field-error">@Html.ValidationMessage("Image")</span>
+        </div>
         <div class="form-field">
             <label asp-for="ItemCode"></label>
             <input asp-for="ItemCode" class="form-control" />

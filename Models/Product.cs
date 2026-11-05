@@ -33,4 +33,6 @@ public class Product
     public decimal Price { get; set; }
 
     public string Supplier { get; set; } = "";
+
+    public string? ImagePath { get; set; }
 }

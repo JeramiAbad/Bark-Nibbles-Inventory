@@ -44,11 +44,11 @@ For complete installation steps, everyday usage, backup guidance, troubleshootin
 ## Important network and database notes
 
 - The host PC must keep the app running. All connected devices use the same database on that PC.
-- A device needs a route to the host, usually by joining the same trusted Wi-Fi/router. A different Wi-Fi network normally cannot connect directly.
-- The app uses HTTP, not HTTPS. Login credentials and session cookies are not encrypted in transit. Use only on a trusted private network; never use public Wi-Fi or expose port 5128 to the public internet.
+- Devices on another Wi-Fi can connect through an authenticated private VPN such as Tailscale. Install it on the host and authorized devices, configure the included `Configure-Bark-Nibbles-VPN-Firewall.ps1` rule on the host, and browse to `http://<host-Tailscale-IP>:5128`. See [User Guidelines](./USER-GUIDELINES.md) for setup and firewall details.
+- The app uses HTTP, not HTTPS. Use it only on a trusted local network or inside the VPN, which encrypts traffic between devices. Never expose port 5128 to the public internet.
 - Each separate installation has its own `inventory.db`; databases do not synchronize automatically.
 - The public-safe ZIP has no database and seeds a fresh catalog on first run. Any separate snapshot package contains business records; treat it as confidential and share it only with authorized people over a secure channel.
-- Back up `inventory.db` only after stopping the app.
+- Back up `inventory.db` and `wwwroot\uploads\products` only after stopping the app.
 
 ## Development
 

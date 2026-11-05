@@ -11,6 +11,10 @@
   <ItemGroup>
     <Content Remove="dist\**" />
     <None Remove="dist\**" />
+    <None Update="Configure-Bark-Nibbles-VPN-Firewall.ps1" CopyToPublishDirectory="PreserveNewest" />
+    <None Update="README.md" CopyToPublishDirectory="PreserveNewest" />
+    <None Update="Start-Bark-Nibbles-Inventory.bat" CopyToPublishDirectory="PreserveNewest" />
+    <None Update="USER-GUIDELINES.md" CopyToPublishDirectory="PreserveNewest" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.31">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>

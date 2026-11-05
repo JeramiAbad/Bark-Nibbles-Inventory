@@ -21,6 +21,10 @@
         <p class="eyebrow">Admin access</p>
         <h1>Welcome back</h1>
         <p class="account-description">Sign in to manage the Bark Nibbles inventory.</p>
+        @if (TempData["StatusMessage"] is string statusMessage)
+        {
+            <p class="account-success" role="status">@statusMessage</p>
+        }
         <div asp-validation-summary="ModelOnly" class="validation-summary" role="alert"></div>
         <form asp-action="Login" asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post" class="account-form">
             <div class="form-field">
@@ -35,6 +39,7 @@
             </div>
             <button class="button button-primary account-submit" type="submit">Sign in</button>
         </form>
+        <p class="account-recovery-link"><a asp-action="ForgotPassword">Forgot your password?</a></p>
         <p class="account-note">This inventory has one admin account and no public registration.</p>
     </main>
 </body>

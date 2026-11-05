@@ -10,8 +10,14 @@
 </div>
 
 <section class="panel form-panel">
-    <form asp-action="Create" class="product-form">
+    <form asp-action="Create" method="post" enctype="multipart/form-data" class="product-form">
         <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+        <div class="form-field product-image-upload">
+            <label for="image">Product photo</label>
+            <input id="image" name="image" type="file" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" />
+            <small>Optional · JPEG, PNG, or WebP · Up to 5 MB</small>
+            <span class="field-error">@Html.ValidationMessage("Image")</span>
+        </div>
         <div class="form-field">
             <label asp-for="ItemCode"></label>
             <input asp-for="ItemCode" class="form-control" placeholder="e.g. BC-100" />
